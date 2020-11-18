@@ -1,6 +1,7 @@
 import math
 
 from collections import Counter
+from collections import OrderedDict
 from copy import deepcopy
 
 
@@ -47,7 +48,7 @@ def get_vocab(docs):
     for doc in docs:
         words.extend(doc.split())
 
-    terms = set(words)
+    terms = OrderedDict.fromkeys(words).keys()
     return terms, len(terms)
 
 

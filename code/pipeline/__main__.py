@@ -1,11 +1,11 @@
 import luigi
 
-from pipeline.tasks import TfIdfTask
+from pipeline.tasks import TfIdfSimilarityPipeline
 
 
 def main():
     print("Staring pipeline...")
-    luigi.build([TfIdfTask()])
+    luigi.build([TfIdfSimilarityPipeline()])
 
 
 if __name__ == '__main__':
