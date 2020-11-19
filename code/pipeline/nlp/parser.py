@@ -2,8 +2,7 @@ import re
 
 
 def get_docs(documents, delimiter='%'):
-    # Return all documents except the last because that's empty string
-    return documents.split(delimiter)[:-1]
+    return documents.split(delimiter)
 
 
 def remove_punctuations(docs):
