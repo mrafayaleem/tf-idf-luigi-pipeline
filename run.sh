@@ -14,7 +14,8 @@ pip install -r code/requirements.txt
 FULLPATH="${PWD}/${1}"
 
 echo "Full path for the documents file is ${FULLPATH}"
-
+echo "Cleaning previous runs..."
+./clean.sh
 echo "Will execute tasks in --local-scheduler mode so web server won't be accessible"
 #luigid &
 
