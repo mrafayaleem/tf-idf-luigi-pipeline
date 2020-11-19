@@ -10,7 +10,7 @@ Execute the following from the location of the repository:
 ./run.sh <absolute-path-to-documents.txt>
 ```
 
-A sample documents.txt file is included in the sample directory. Note that the path of the input file has to be **absolute**.
+A sample documents.txt file is included in the sample-data directory. Note that the path of the input file has to be **absolute**.
 
 All documents in the documents.txt file should end with the delimiter `%`.
 
