@@ -6,6 +6,12 @@ from copy import deepcopy
 
 
 def get_term_frequencies(docs):
+    """ Given a list of docs, it generated term frequencies and log10 of term frequencies and returns both of them.
+
+    :param docs:
+    :return: term frequency and log10 of term frequency as separate dict indexed on doc id and containing frequencies
+    for all the words for that doc
+    """
     tfreq = {}
     tfreqlog = {}
 
@@ -25,6 +31,12 @@ def get_term_frequencies(docs):
 
 
 def get_normalized_term_frequencies(docs):
+    """ Given a list of docs, it generated term frequencies and normalized term frequencies and returns both of them.
+
+    :param docs:
+    :return: term frequency and normalized term frequency as separate dict indexed on doc id and containing frequencies
+    for all the words for that doc
+    """
     tfreq = {}
     tfreq_norm = {}
 
@@ -44,6 +56,11 @@ def get_normalized_term_frequencies(docs):
 
 
 def get_vocab(docs):
+    """ Returns unique terms in the corpus along with the vocabulary size.
+
+    :param docs:
+    :return: (terms, vocab_size)
+    """
     words = []
     for doc in docs:
         words.extend(doc.split())
@@ -53,6 +70,14 @@ def get_vocab(docs):
 
 
 def get_idfs(docs, terms, tfreq_d, N):
+    """ Generates inverse document frequency for each term in the vocabulary.
+
+    :param docs:
+    :param terms:
+    :param tfreq_d:
+    :param N: number of documents
+    :return: inverse document frequency for every term
+    """
     idf = {}
 
     for term in terms:
@@ -67,6 +92,14 @@ def get_idfs(docs, terms, tfreq_d, N):
 
 
 def get_word_term_doc_matrix(terms, docs, tfreq_norm, idf):
+    """ Generates tf-idf weight matrix for every term and the document.
+
+    :param terms:
+    :param docs:
+    :param tfreq_norm:
+    :param idf:
+    :return: tf-idf weight matrix
+    """
     word_term_doc = []
     for term in terms:
         scores = [term]
