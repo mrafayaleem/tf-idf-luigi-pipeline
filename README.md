@@ -18,7 +18,7 @@ A successful execution would produce a `similarity.csv` file in the CWD of the r
 
 **To run it using docker-compose:**
 
-From the docker directory, run the following:
+Place your documents.txt file in the same directory as run.sh. Then, from the docker directory, run the following:
 ```
 docker-compose up
 ```
@@ -55,6 +55,8 @@ Each of the following steps for calculating tf-idf and a final similarity matrix
 
 These tasks are defined in `code/pipeline/tasks.py`
 
+Each task writes it's output to a pickled target file that is used as an input for the next task. These files are generated in `code/pipeline/data`.
+
 The underlying implementation of the parser and tf-idf algorithm are located in the nlp package. I have ensured that every possible detail is broken into small functions so they can be unit tested individually. For example, we can unit-test tf component of tf-idf by virtue of having tf as a separate function.
 
 I have also included a jupyter notebook (tf-idf.ipynb) to understand the individual breakdown of the algorithm.
@@ -62,3 +64,7 @@ I have also included a jupyter notebook (tf-idf.ipynb) to understand the individ
 ### Improvements and further notes
 
 - Add unit tests for the nlp package
+
+
+---
+Maintainer and author: Muhammad Rafay Aleem
