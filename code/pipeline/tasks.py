@@ -13,16 +13,16 @@ from pipeline.nlp.parser import remove_punctuations
 from pipeline.nlp.tfidf import get_normalized_term_frequencies, get_vocab, get_idfs, get_word_term_doc_matrix
 
 TARGET_PATH = os.path.join(os.path.dirname(__file__), 'data/{date}'.format(date=date.today()))
-SOURCE_PATH = os.path.join(os.path.dirname(__file__))
 
 
 class ParseAndClean(luigi.Task):
+    inputpath = luigi.Parameter()
 
     def output(self):
         return get_local_target('cleaned.pkl')
 
     def run(self):
-        with get_local_input('documents.txt').open('r') as in_file, self.output().open('w') as out_file:
+        with get_cwd_input(self.inputpath).open('r') as in_file, self.output().open('w') as out_file:
             raw_doc = in_file.read()
 
             parsers = [remove_punctuations, remove_next_tab_chars, remove_extra_whitespaces]
@@ -33,12 +33,13 @@ class ParseAndClean(luigi.Task):
 
 
 class ComputeTf(luigi.Task):
+    inputpath = luigi.Parameter()
 
     def output(self):
         return get_local_target('tf.pkl')
 
     def requires(self):
-        return ParseAndClean()
+        return ParseAndClean(inputpath=self.inputpath)
 
     def run(self):
         with get_local_target('cleaned.pkl').open('r') as in_file, \
@@ -55,12 +56,13 @@ class ComputeTf(luigi.Task):
 
 
 class ComputeIdf(luigi.Task):
+    inputpath = luigi.Parameter()
 
     def output(self):
         return get_local_target('idf.pkl')
 
     def requires(self):
-        return ComputeTf()
+        return ComputeTf(inputpath=self.inputpath)
 
     def run(self):
         with get_local_target('tf.pkl').open('r') as tf_file, self.output().open('w') as out_file, \
@@ -80,9 +82,10 @@ class ComputeIdf(luigi.Task):
 
 
 class ComputeTfIdf(luigi.Task):
+    inputpath = luigi.Parameter()
 
     def requires(self):
-        return ComputeIdf()
+        return ComputeIdf(inputpath=self.inputpath)
 
     def output(self):
         return get_local_target('tf-idf.pkl')
@@ -106,12 +109,14 @@ class ComputeTfIdf(luigi.Task):
 
 
 class ComputeSimilarity(luigi.Task):
+    inputpath = luigi.Parameter()
+    outputpath = luigi.Parameter()
 
     def requires(self):
-        return ComputeTfIdf()
+        return ComputeTfIdf(inputpath=self.inputpath)
 
     def output(self):
-        return get_local_target_result('similarity.csv')
+        return get_cwd_target(self.outputpath, 'similarity.csv')
 
     def run(self):
         with get_local_target('tf-idf.pkl').open('r') as tfidf_file, \
@@ -132,13 +137,15 @@ class ComputeSimilarity(luigi.Task):
 
 
 class TfIdfSimilarityPipeline(luigi.WrapperTask):
+    inputpath = luigi.Parameter()
+    outputpath = luigi.Parameter()
 
     def requires(self):
         return [
-            ParseAndClean(),
-            ComputeTf(),
-            ComputeIdf(),
-            ComputeSimilarity(),
+            ParseAndClean(inputpath=self.inputpath),
+            ComputeTf(inputpath=self.inputpath),
+            ComputeIdf(inputpath=self.inputpath),
+            ComputeSimilarity(inputpath=self.inputpath, outputpath=self.outputpath),
         ]
 
     def run(self):
@@ -153,9 +160,9 @@ def get_local_target(path):
     return luigi.LocalTarget(os.path.join(TARGET_PATH, path), format=luigi.format.Nop)
 
 
-def get_local_target_result(path):
-    return luigi.LocalTarget(os.path.join(TARGET_PATH, path))
+def get_cwd_target(path, filename='similarity.csv'):
+    return luigi.LocalTarget(os.path.join(path, filename))
 
 
-def get_local_input(path):
-    return luigi.LocalTarget(os.path.join(SOURCE_PATH, path))
+def get_cwd_input(path):
+    return luigi.LocalTarget(path)
