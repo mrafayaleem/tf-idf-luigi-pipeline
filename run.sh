@@ -11,7 +11,7 @@ fi
 
 pip install -r code/requirements.txt
 
-FULLPATH="${PWD}/${1}"
+FULLPATH="${1}"
 
 echo "Full path for the documents file is ${FULLPATH}"
 echo "Cleaning previous runs..."
