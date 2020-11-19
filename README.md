@@ -5,6 +5,8 @@ You can run this solution either using a clean python3 environment or using the 
 
 **To run it locally:**
 
+I have included a sample eval.sh script in the repository directory. You can use that to do a sanity check by executing `./eval.sh`. For normal run with a custom documents.txt file, follow the process below:
+
 Execute the following from the location of the repository:
 ```
 ./run.sh <absolute-path-to-documents.txt>
