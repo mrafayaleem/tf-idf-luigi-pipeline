@@ -1,0 +1,8 @@
+version: '3.2'
+services:
+  tfidf:
+    image: python:3.9.0
+    entrypoint: [ "sh", "/app/docker/docker-entrypoint.sh" ]
+
+    volumes:
+      - ../:/app
